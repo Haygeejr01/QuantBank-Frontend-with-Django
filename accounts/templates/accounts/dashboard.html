@@ -1,0 +1,865 @@
+{% extends 'accounts/dashboard_layout.html' %}
+
+{% block dashboard_title %}NeuroBank Dashboard{% endblock %}
+{% block page_title %}Welcome back{% endblock %}
+
+{% block dashboard_content %}
+<div style="background: red; color: white;">TOP_DIAGNOSTIC</div>
+<!-- 1. Service Hub (Quick Actions) - Kept at top as requested -->
+<div class="neuro-card quick-actions-card animate-slide-up"
+    style="margin-bottom: 2.5rem; animation-delay: 0.05s; padding: 1.5rem;">
+    <h3
+        style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;">
+        Quick Actions</h3>
+    <div class="quick-actions-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+        <div onclick="openTransferStepper()" class="qa-item"
+            style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 1rem 0.5rem; background: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: 18px; cursor: pointer; transition: var(--transition-smooth); text-align: center;">
+            <div class="qa-icon"
+                style="width: 48px; height: 48px; background: var(--bg-card); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--border-subtle);">
+                💸</div>
+            <span class="qa-label"
+                style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Transfer</span>
+        </div>
+        <div onclick="openServiceStepper('airtime')" class="qa-item"
+            style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 1rem 0.5rem; background: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: 18px; cursor: pointer; transition: var(--transition-smooth); text-align: center;">
+            <div class="qa-icon"
+                style="width: 48px; height: 48px; background: var(--bg-card); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--border-subtle);">
+                📱</div>
+            <span class="qa-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Airtime</span>
+        </div>
+        <div onclick="openServiceStepper('data')" class="qa-item"
+            style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 1rem 0.5rem; background: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: 18px; cursor: pointer; transition: var(--transition-smooth); text-align: center;">
+            <div class="qa-icon"
+                style="width: 48px; height: 48px; background: var(--bg-card); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--border-subtle);">
+                🌐</div>
+            <span class="qa-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Data</span>
+        </div>
+        <div onclick="openDepositStepper()" class="qa-item"
+            style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem; padding: 1rem 0.5rem; background: var(--bg-app); border: 1px solid var(--border-subtle); border-radius: 18px; cursor: pointer; transition: var(--transition-smooth); text-align: center;">
+            <div class="qa-icon"
+                style="width: 48px; height: 48px; background: var(--bg-card); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid var(--border-subtle);">
+                🏦</div>
+            <span class="qa-label" style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Deposit</span>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Bento Grid -->
+<div class="bento-grid animate-entry" style="animation-delay: 0.15s;">
+    <!-- Balance Card -->
+    <div class="neuro-card card-balance animate-slide-up">
+        <div class="card-header">
+            <h3>Total Valuation</h3>
+            <div class="trend-pill positive">↗ 12% Neural Growth</div>
+        </div>
+        <div class="balance-meta">
+            <div style="display: flex; align-items: center; gap: 0.8rem; margin: 1rem 0;">
+                <h2 class="total-bal" style="font-size: 2.8rem;">₦<span id="totalBalanceDisplay">{{ total_balance
+                        }}</span></h2>
+                <button onclick="toggleBalanceVisibility()" class="visibility-toggle" id="balanceToggleBtn">
+                    <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                </button>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <span class="badge"
+                    style="background: var(--accent-glow); border-color: var(--accent-cyan); color: var(--accent-cyan);">Neural
+                    Secured</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI -->
+    <div class="neuro-card card-ai">
+        <div class="ai-glow"></div>
+        <h3>Neuro AI Advisor</h3>
+        <p>Portfolio liquidity is optimal. Neural encryption at 100%.</p>
+        <div class="dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+    </div>
+
+    <!-- Earnings -->
+    <div class="neuro-card card-earnings">
+        <div class="card-header">
+            <h3>Yield Growth</h3>
+            <span class="icon-arrow">↗</span>
+        </div>
+        <div class="chart-container-donut">
+            <canvas id="earningsChart"></canvas>
+            <div class="center-text">
+                <div class="percent">58%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asset Flow (Spending Chart Container) -->
+    <div class="neuro-card card-spending">
+        <div class="card-header">
+            <h3>Asset Flow</h3>
+            <span class="icon-arrow">↘</span>
+        </div>
+        <div class="spending-amount" style="font-size: 1.8rem; font-weight: 800; margin: 0.5rem 0;">₦2,000 <span
+                style="font-size: 0.7rem; color: var(--success); font-weight: 600;">Managed</span></div>
+        <div style="height: 100px; margin-top: 1rem;">
+            <canvas id="spendingChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="neuro-card card-transactions">
+        <div class="card-header">
+            <h3>Neural Pulse Ledger</h3>
+            <button class="btn-micro" onclick="openTransactionHistory()">View All</button>
+        </div>
+        <div class="tx-list">
+            {% for tx in transactions %}
+            <div class="tx-item">
+                <div class="tx-icon {% if tx.transaction_type == 'credit' %}credit{% else %}debit{% endif %}">
+                    {% if tx.transaction_type == 'credit' %}📥{% else %}📤{% endif %}
+                </div>
+                <div class="tx-info">
+                    <div class="tx-name">{{ tx.details|truncatechars:18 }}</div>
+                    <div class="tx-date">{{ tx.timestamp|date:"d M, H:i" }}</div>
+                </div>
+                <div class="tx-amount {% if tx.transaction_type == 'credit' %}pos{% else %}neg{% endif %}">
+                    {% if tx.transaction_type == 'credit' %}+{% else %}-{% endif %}₦{{ tx.amount }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dashboard_modals %}
+<!-- Modals (Preserved Functionality) -->
+<div id="transferModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 2000; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="neuro-card animate-entry" style="width: 100%; max-width: 500px; padding: 2.5rem; position: relative;">
+        <button onclick="closeTransferStepper()"
+            style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+        <div id="transferStepperContent">
+            <!-- Step 1: Source Selection -->
+            <div id="step1" class="step-content">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Source Account</h2>
+                <div style="display: grid; gap: 1rem;">
+                    {% for acc in accounts %}
+                    <div onclick="selectSourceAcc('{{ acc.id }}', '{{ acc.get_bank_type_display }}')" class="neuro-card"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 800;">{{ acc.get_bank_type_display|upper }}</div>
+                            <div class="acc-num-label">**** {{acc.account_number|slice:"-4:"}}</div>
+                        </div>
+                        <div style="font-weight: 800; color: var(--accent-cyan); opacity: 0.5;">VAULT ACTIVE</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Step 2: Recipient Account & Bank (OPay Style) -->
+            <div id="step2" class="step-content" style="display: none;">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Recipient Identity</h2>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="field-label">Account Number</label>
+                    <input type="text" id="recipientAcc" placeholder="e.g. 0123456789" maxlength="10"
+                        oninput="onAccountNumberInput()"
+                        style="width: 100%; padding: 1.2rem; border-radius: 12px; background: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 1.2rem; font-weight: 800; letter-spacing: 0.1em;">
+                </div>
+
+                <div id="bankSelectorArea" style="margin-bottom: 1.5rem; display: none;">
+                    <label class="field-label">Select Destination Bank</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div onclick="selectDestBank('accessbank', 'Access Bank')"
+                            class="neuro-card data-plan-card bank-option" id="bank-accessbank"
+                            style="text-align: center; cursor: pointer; padding: 1rem; border-color: #ff4e00;">Access
+                        </div>
+                        <div onclick="selectDestBank('polarisbank', 'Polaris Bank')"
+                            class="neuro-card data-plan-card bank-option" id="bank-polarisbank"
+                            style="text-align: center; cursor: pointer; padding: 1rem; border-color: #4c1d95;">Polaris
+                        </div>
+                    </div>
+                </div>
+
+                <div id="identityResolution"
+                    style="display: none; margin-top: 2rem; text-align: center; background: var(--accent-glow); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--accent-cyan);">
+                    <div
+                        style="color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;">
+                        Scanning Neural Ledger...</div>
+                    <div id="recipientName"
+                        style="font-size: 1.3rem; font-weight: 800; margin: 0.5rem 0; color: var(--accent-cyan);">-
+                    </div>
+
+                    <div style="margin-top: 1.5rem;">
+                        <label class="field-label" style="text-align: left;">Enter Amount (₦)</label>
+                        <input type="number" id="transferAmount" placeholder="0.00"
+                            style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 1.5rem; font-weight: 800; text-align: center;">
+                    </div>
+
+                    <button onclick="reviewTransfer()" class="btn btn-primary"
+                        style="width: 100%; margin-top: 1.5rem; padding: 1.2rem;">Confirm Details &rarr;</button>
+                </div>
+
+                <button onclick="backToStep(1)" class="btn"
+                    style="width: 100%; margin-top: 2rem; background: var(--bg-app);">Back</button>
+            </div>
+
+            <!-- Step 3: Authorization Review -->
+            <div id="step3" class="step-content" style="display: none;">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Review & Authorize</h2>
+                <div class="neuro-card" style="background: var(--bg-app); margin-bottom: 2rem; padding: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 1.2rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.2rem;">
+                        <span style="color: var(--text-muted);">Recipient</span>
+                        <div style="text-align: right;">
+                            <div id="reviewToName" style="font-weight: 800; color: var(--accent-cyan);">-</div>
+                            <div id="reviewToBank" style="font-size: 0.75rem; color: var(--text-muted);">Bank name</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1.2rem;">
+                        <span style="color: var(--text-muted);">Amount</span>
+                        <span style="font-weight: 800; font-size: 1.2rem; color: var(--accent-cyan);">₦<span
+                                id="reviewAmount">0</span></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Fee</span>
+                        <span style="font-weight: 800; color: var(--success);">Free ⚡</span>
+                    </div>
+                </div>
+                <button onclick="executeTransfer()" id="executeBtn" class="btn btn-primary"
+                    style="width: 100%; padding: 1.2rem; font-size: 1.1rem;">Authorize Transaction 🛡️</button>
+                <button onclick="backToStep(2)" class="btn"
+                    style="width: 100%; margin-top: 1rem; background: var(--bg-app);">Back</button>
+            </div>
+
+            <!-- Step 4: Success State -->
+            <div id="step4" class="step-content" style="display: none; text-align: center;">
+                <div style="font-size: 4.5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px var(--success));">✅
+                </div>
+                <h2 style="color: var(--success); margin-bottom: 0.5rem; font-size: 2rem;">Settled!</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1.1rem;">Your ₦<span
+                        id="finalSuccessAmount">0</span> has reached its destination via neural uplink.</p>
+                <button onclick="window.location.reload()" class="btn btn-primary"
+                    style="width: 100%; padding: 1.2rem;">Return to Hub</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="serviceModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 2100; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="neuro-card animate-entry" style="width: 100%; max-width: 500px; padding: 2.5rem; position: relative;">
+        <button onclick="closeServiceStepper()"
+            style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+        <div id="serviceStepperContent">
+            <div id="serviceStep1" class="service-step-content">
+                <h2 id="serviceTitle" style="margin-bottom: 2rem; text-align: center;">Service Payment</h2>
+                <div style="display: grid; gap: 1rem;">
+                    {% for acc in accounts %}
+                    <div onclick="selectServiceSource('{{ acc.id }}')" class="neuro-card"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 800;">{{ acc.get_bank_type_display|upper }}</div>
+                            <div class="acc-num-label">**** {{acc.account_number|slice:"-4:"}}</div>
+                        </div>
+                        <div style="font-weight: 800; color: var(--accent-cyan);">VAULT ACTIVE</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="serviceStep2" class="service-step-content" style="display: none;">
+                <h2 id="serviceActionTitle" style="margin-bottom: 2rem; text-align: center;">Details</h2>
+
+                <!-- Phone Input with Network Detection -->
+                <div style="position: relative; margin-bottom: 1.5rem;">
+                    <input type="text" id="serviceTarget" placeholder="Phone Number"
+                        oninput="detectServiceNetwork(this.value)"
+                        style="width: 100%; padding: 1rem; padding-right: 5rem; border-radius: 12px; background: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-main);">
+                    <div id="serviceNetworkBadge"
+                        style="position: absolute; right: 0.8rem; top: 50%; transform: translateY(-50%); font-size: 0.7rem; font-weight: 800; padding: 0.3rem 0.6rem; border-radius: 6px; background: var(--accent-glow); color: var(--accent-cyan); display: none; white-space: nowrap;">
+                    </div>
+                </div>
+
+                <!-- Airtime: Plans Grid (OPay-style) -->
+                <div id="airtimeSection">
+                    <p
+                        style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem;">
+                        Select Amount</p>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.5rem;">
+                        <div onclick="selectAirtimePlan(100)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦100</div>
+                        </div>
+                        <div onclick="selectAirtimePlan(200)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦200</div>
+                        </div>
+                        <div onclick="selectAirtimePlan(500)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦500</div>
+                        </div>
+                        <div onclick="selectAirtimePlan(1000)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦1,000</div>
+                        </div>
+                        <div onclick="selectAirtimePlan(2000)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦2,000</div>
+                        </div>
+                        <div onclick="selectAirtimePlan(5000)" class="data-plan-card airtime-card">
+                            <div class="plan-price">₦5,000</div>
+                        </div>
+                    </div>
+                    <input type="number" id="serviceAmount" placeholder="Or Enter Amount (₦)"
+                        style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-main); margin-bottom: 1.5rem;">
+                </div>
+
+                <!-- Data: Plans Grid (OPay-style) -->
+                <div id="dataPlansSection" style="display: none;">
+                    <p
+                        style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem;">
+                        Select a Data Plan</p>
+                    <div
+                        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem;">
+                        <!-- Daily Plans -->
+                        <div onclick="selectDataPlan('100MB Daily', 100)" class="data-plan-card">
+                            <div class="plan-size">100MB</div>
+                            <div class="plan-price">₦100</div>
+                            <div class="plan-validity">1 Day</div>
+                        </div>
+                        <div onclick="selectDataPlan('1GB Daily', 300)" class="data-plan-card">
+                            <div class="plan-size">1GB</div>
+                            <div class="plan-price">₦300</div>
+                            <div class="plan-validity">1 Day</div>
+                        </div>
+
+                        <!-- Weekly Plans -->
+                        <div onclick="selectDataPlan('2GB Weekly', 500)" class="data-plan-card popular">
+                            <div class="plan-size">2GB</div>
+                            <div class="plan-price">₦500</div>
+                            <div class="plan-validity">7 Days</div>
+                        </div>
+                        <div onclick="selectDataPlan('6GB Weekly', 1500)" class="data-plan-card">
+                            <div class="plan-size">6GB</div>
+                            <div class="plan-price">₦1,500</div>
+                            <div class="plan-validity">7 Days</div>
+                        </div>
+
+                        <!-- Monthly Plans -->
+                        <div onclick="selectDataPlan('1.5GB Monthly', 1000)" class="data-plan-card">
+                            <div class="plan-size">1.5GB</div>
+                            <div class="plan-price">₦1,000</div>
+                            <div class="plan-validity">30 Days</div>
+                        </div>
+                        <div onclick="selectDataPlan('3GB Monthly', 1500)" class="data-plan-card">
+                            <div class="plan-size">3GB</div>
+                            <div class="plan-price">₦1,500</div>
+                            <div class="plan-validity">30 Days</div>
+                        </div>
+                        <div onclick="selectDataPlan('5GB Monthly', 2000)" class="data-plan-card">
+                            <div class="plan-size">5GB</div>
+                            <div class="plan-price">₦2,000</div>
+                            <div class="plan-validity">30 Days</div>
+                        </div>
+                        <div onclick="selectDataPlan('10GB Monthly', 3000)" class="data-plan-card">
+                            <div class="plan-size">10GB</div>
+                            <div class="plan-price">₦3,000</div>
+                            <div class="plan-validity">30 Days</div>
+                        </div>
+                    </div>
+                    <div id="selectedPlanDisplay"
+                        style="display: none; padding: 1rem; background: var(--accent-glow); border-radius: 12px; text-align: center; margin-bottom: 1.5rem;">
+                        <span style="font-weight: 800; color: var(--accent-cyan);" id="selectedPlanText">-</span>
+                    </div>
+                </div>
+
+                <button onclick="executeServicePayment()" id="servicePayBtn" class="btn btn-primary"
+                    style="width: 100%; padding: 1.2rem;">Settle Hub ⚡</button>
+                <button onclick="backToServiceStep(1)" class="btn"
+                    style="width: 100%; margin-top: 1rem; background: var(--bg-app);">Back</button>
+            </div>
+            <div id="serviceStep3" class="service-step-content" style="display: none; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1.5rem;">⚡</div>
+                <h2 style="color: var(--success); margin-bottom: 0.5rem;">Neural Node Updated!</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Your <span
+                        id="successServiceType">payment</span> of ₦<span id="successServiceAmount">0</span> was
+                    successful.</p>
+                <button onclick="window.location.reload()" class="btn btn-primary" style="width: 100%;">Return to
+                    Hub</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="depositModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 2200; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="neuro-card animate-entry" style="width: 100%; max-width: 500px; padding: 2.5rem; position: relative;">
+        <button onclick="closeDepositStepper()"
+            style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+        <div id="depositStepperContent">
+            <div id="depositStep1" class="deposit-step-content">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Deposit to Account</h2>
+                <div style="display: grid; gap: 1rem;">
+                    {% for acc in accounts %}
+                    <div onclick="selectDepositAccount('{{ acc.id }}')" class="neuro-card"
+                        style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 800;">{{ acc.get_bank_type_display|upper }}</div>
+                            <div class="acc-num-label">**** {{acc.account_number|slice:"-4:"}}</div>
+                        </div>
+                        <div style="font-weight: 800; color: var(--accent-cyan);">₦{{ acc.balance }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="depositStep2" class="deposit-step-content" style="display: none;">
+                <h2 style="margin-bottom: 2rem; text-align: center;">Enter Amount</h2>
+                <input type="number" id="depositAmount" placeholder="Amount (₦)"
+                    style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--bg-app); border: 1px solid var(--border-subtle); color: var(--text-main); margin-bottom: 2rem;">
+                <button onclick="executeDeposit()" id="depositBtn" class="btn btn-primary"
+                    style="width: 100%; padding: 1.2rem;">Complete Deposit 💸</button>
+                <button onclick="backToDepositStep(1)" class="btn"
+                    style="width: 100%; margin-top: 1rem; background: var(--bg-app);">Back</button>
+            </div>
+            <div id="depositStep3" class="deposit-step-content" style="display: none; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 1.5rem;">💎</div>
+                <h2 style="color: var(--success); margin-bottom: 0.5rem;">Deposit Settled!</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">₦<span id="finalDepositAmount">0</span> has
+                    been added to your vault.</p>
+                <button onclick="window.location.reload()" class="btn btn-primary" style="width: 100%;">Vault
+                    Access</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="historyModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 2300; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="neuro-card animate-entry"
+        style="width: 100%; max-width: 600px; max-height: 80vh; padding: 2.5rem; position: relative; display: flex; flex-direction: column;">
+        <button onclick="closeTransactionHistory()"
+            style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+        <h2 style="margin-bottom: 2rem; text-align: center;">Pulse Ledger</h2>
+        <div id="historyList" style="flex: 1; overflow-y: auto; padding-right: 0.5rem;">
+            <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Scanning Neural Pathways...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dashboard_scripts %}
+<script>
+    // Dashboard Specific Charts
+    document.addEventListener('DOMContentLoaded', () => {
+        initCharts();
+    });
+
+    function initCharts() {
+        const ctxBalance = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctxBalance, {
+            type: 'line',
+            data: {
+                labels: ['15', '16', '17', '18', '19', '20', '21', '22', '23', '24'],
+                datasets: [{
+                    label: 'Liquidity',
+                    data: [38000, 39500, 39000, 41200, 40500, 43000, 42500, 44000, 43500, 40111],
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { x: { display: false }, y: { display: false } }
+            }
+        });
+
+        const ctxEarnings = document.getElementById('earningsChart').getContext('2d');
+        new Chart(ctxEarnings, {
+            type: 'doughnut',
+            data: {
+                labels: ['Achieved', 'Remaining'],
+                datasets: [{
+                    data: [58, 42],
+                    backgroundColor: ['#06b6d4', '#1e293b'],
+                    borderWidth: 0,
+                    cutout: '80%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+
+        const ctxSpending = document.getElementById('spendingChart').getContext('2d');
+        new Chart(ctxSpending, {
+            type: 'bar',
+            data: {
+                labels: ['Clothes', 'Food', 'Pets', 'Invest'],
+                datasets: [{
+                    label: 'Spend',
+                    data: [450, 800, 200, 550],
+                    backgroundColor: ['#6366f1', '#8b5cf6', '#ec4899', '#06b6d4'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } },
+                    y: { display: false }
+                }
+            }
+        });
+    }
+
+    // Modal Logic
+    let selectedSourceId = null;
+    let destBankType = "";
+    let recipientName = "";
+
+    function openTransferStepper() {
+        document.getElementById('transferModal').style.display = 'flex';
+        // Reset states
+        document.getElementById('recipientAcc').value = '';
+        document.getElementById('transferAmount').value = '';
+        document.getElementById('identityResolution').style.display = 'none';
+        document.querySelectorAll('.bank-option').forEach(b => b.classList.remove('selected'));
+    }
+    function closeTransferStepper() { document.getElementById('transferModal').style.display = 'none'; backToStep(1); }
+    function backToStep(n) { document.querySelectorAll('.step-content').forEach(s => s.style.display = 'none'); document.getElementById('step' + n).style.display = 'block'; }
+    function selectSourceAcc(id, bank) { selectedSourceId = id; backToStep(2); }
+
+    async function onAccountNumberInput() {
+        const accNo = document.getElementById('recipientAcc').value;
+        const bankArea = document.getElementById('bankSelectorArea');
+        const identityDiv = document.getElementById('identityResolution');
+
+        // If they edit the account number, reset identity
+        identityDiv.style.display = 'none';
+
+        if (accNo.length === 10) {
+            // Trigger auto-discovery
+            try {
+                const resp = await fetch(`/api/discover-banks/?account_number=${accNo}`);
+                const data = await resp.json();
+                if (data.success && data.banks.length > 0) {
+                    // Filter bank options to show only those discovered
+                    const discoveredTypes = data.banks.map(b => b.type);
+                    document.querySelectorAll('.bank-option').forEach(opt => {
+                        const type = opt.id.replace('bank-', '');
+                        if (discoveredTypes.includes(type)) {
+                            opt.style.display = 'block';
+                        } else {
+                            opt.style.display = 'none';
+                        }
+                    });
+                    bankArea.style.display = 'block';
+                } else {
+                    // Show all banks if none discovered
+                    document.querySelectorAll('.bank-option').forEach(opt => opt.style.display = 'block');
+                    bankArea.style.display = 'block';
+                }
+            } catch (e) {
+                console.error("Discovery failed", e);
+            }
+        }
+    }
+
+    function selectDestBank(type, name) {
+        destBankType = type;
+        document.querySelectorAll('.bank-option').forEach(b => b.classList.remove('selected'));
+        const targetBtn = document.getElementById('bank-' + type);
+        if (targetBtn) targetBtn.classList.add('selected');
+
+        lookupRecipient();
+    }
+
+    async function lookupRecipient() {
+        const accNo = document.getElementById('recipientAcc').value;
+        if (!accNo || accNo.length < 10) return;
+
+        const resDiv = document.getElementById('identityResolution');
+        const nameDiv = document.getElementById('recipientName');
+
+        resDiv.style.display = 'block';
+        nameDiv.innerText = "Verifying Identity...";
+
+        try {
+            const resp = await fetch(`/api/lookup/?account_number=${accNo}&bank_type=${destBankType}`);
+            const data = await resp.json();
+            if (data.success) {
+                recipientName = data.owner_name;
+                nameDiv.innerText = recipientName;
+            } else {
+                nameDiv.innerText = "ALREADY SETTLED / UNKNOWN";
+                recipientName = "Unknown Recipient";
+            }
+        } catch (e) {
+            nameDiv.innerText = "Verif Core Offline";
+        }
+    }
+
+    function reviewTransfer() {
+        const amt = document.getElementById('transferAmount').value;
+        if (!amt || amt <= 0) { alert('Please enter a valid amount.'); return; }
+
+        document.getElementById('reviewToName').innerText = recipientName;
+        document.getElementById('reviewToBank').innerText = destBankType.toUpperCase();
+        document.getElementById('reviewAmount').innerText = parseFloat(amt).toLocaleString();
+        backToStep(3);
+    }
+
+    async function executeTransfer() {
+        const btn = document.getElementById('executeBtn');
+        btn.disabled = true;
+        btn.innerText = "Authorizing Neural Link...";
+
+        const payload = {
+            source_acc_id: selectedSourceId,
+            dest_acc_number: document.getElementById('recipientAcc').value,
+            dest_bank_type: destBankType,
+            amount: document.getElementById('transferAmount').value
+        };
+
+        try {
+            const resp = await fetch('/api/transfer/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                body: JSON.stringify(payload)
+            });
+            const data = await resp.json();
+            if (data.success) {
+                document.getElementById('finalSuccessAmount').innerText = data.amount;
+                backToStep(4);
+            } else {
+                alert(data.message);
+                btn.disabled = false;
+                btn.innerText = "Authorize Transaction";
+            }
+        } catch (e) {
+            alert("Execution failed.");
+            btn.disabled = false;
+            btn.innerText = "Authorize Transaction 🛡️";
+        }
+    }
+
+    // Service JS
+    let currentService = "";
+    let selectedServiceSourceId = null;
+
+    const serviceNetworks = {
+        '0803': { name: 'MTN', color: '#FFCC00' }, '0703': { name: 'MTN', color: '#FFCC00' },
+        '0806': { name: 'MTN', color: '#FFCC00' }, '0706': { name: 'MTN', color: '#FFCC00' },
+        '0813': { name: 'MTN', color: '#FFCC00' }, '0816': { name: 'MTN', color: '#FFCC00' },
+        '0903': { name: 'MTN', color: '#FFCC00' }, '0906': { name: 'MTN', color: '#FFCC00' },
+        '0805': { name: 'GLO', color: '#2E7D32' }, '0705': { name: 'GLO', color: '#2E7D32' },
+        '0815': { name: 'GLO', color: '#2E7D32' }, '0811': { name: 'GLO', color: '#2E7D32' },
+        '0905': { name: 'GLO', color: '#2E7D32' },
+        '0802': { name: 'AIRTEL', color: '#D32F2F' }, '0702': { name: 'AIRTEL', color: '#D32F2F' },
+        '0808': { name: 'AIRTEL', color: '#D32F2F' }, '0708': { name: 'AIRTEL', color: '#D32F2F' },
+        '0812': { name: 'AIRTEL', color: '#D32F2F' }, '0902': { name: 'AIRTEL', color: '#D32F2F' },
+        '0907': { name: 'AIRTEL', color: '#D32F2F' },
+        '0809': { name: '9MOBILE', color: '#004D40' }, '0817': { name: '9MOBILE', color: '#004D40' },
+        '0818': { name: '9MOBILE', color: '#004D40' }, '0909': { name: '9MOBILE', color: '#004D40' },
+        '0908': { name: '9MOBILE', color: '#004D40' }
+    };
+
+    function detectServiceNetwork(val) {
+        const badge = document.getElementById('serviceNetworkBadge');
+        const prefix = val.substring(0, 4);
+        if (serviceNetworks[prefix] && (currentService === 'airtime' || currentService === 'data')) {
+            const net = serviceNetworks[prefix];
+            badge.innerText = net.name;
+            badge.style.display = 'block';
+            badge.style.color = '#fff';
+            badge.style.background = net.color;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function setServiceAmount(val) {
+        document.getElementById('serviceAmount').value = val;
+    }
+
+    function selectAirtimePlan(price) {
+        document.querySelectorAll('.airtime-card').forEach(c => c.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        setServiceAmount(price);
+    }
+
+    let selectedDataPlanAmount = 0;
+    function selectDataPlan(planName, price) {
+        selectedDataPlanAmount = price;
+        document.querySelectorAll('.data-plan-card').forEach(c => c.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        document.getElementById('selectedPlanDisplay').style.display = 'block';
+        document.getElementById('selectedPlanText').innerText = `${planName} • ₦${price.toLocaleString()}`;
+    }
+
+    function openServiceStepper(type) {
+        currentService = type;
+        selectedDataPlanAmount = 0;
+        const modal = document.getElementById('serviceModal');
+        const airtimeSection = document.getElementById('airtimeSection');
+        const dataPlansSection = document.getElementById('dataPlansSection');
+        let title = "SERVICE PAYMENT";
+        let placeholder = "Phone Number";
+
+        document.getElementById('serviceAmount').value = '';
+        document.querySelectorAll('.data-plan-card').forEach(c => c.classList.remove('selected'));
+
+        if (type === 'airtime') {
+            title = "AIRTIME RECHARGE";
+            airtimeSection.style.display = 'block';
+            dataPlansSection.style.display = 'none';
+        } else if (type === 'data') {
+            title = "DATA PURCHASE";
+            airtimeSection.style.display = 'none';
+            dataPlansSection.style.display = 'block';
+            document.getElementById('selectedPlanDisplay').style.display = 'none';
+        } else {
+            airtimeSection.style.display = 'none';
+            dataPlansSection.style.display = 'none';
+        }
+
+        document.getElementById('serviceTitle').innerText = title;
+        document.getElementById('serviceTarget').placeholder = placeholder;
+        document.getElementById('serviceNetworkBadge').style.display = 'none';
+        modal.style.display = 'flex';
+    }
+    function closeServiceStepper() { document.getElementById('serviceModal').style.display = 'none'; backToServiceStep(1); }
+    function backToServiceStep(n) { document.querySelectorAll('.service-step-content').forEach(s => s.style.display = 'none'); document.getElementById('serviceStep' + n).style.display = 'block'; }
+    function selectServiceSource(id) { selectedServiceSourceId = id; backToServiceStep(2); }
+
+    async function executeServicePayment() {
+        const btn = document.getElementById('servicePayBtn');
+        const target = document.getElementById('serviceTarget').value;
+        let amount = 0;
+
+        if (currentService === 'data') {
+            amount = selectedDataPlanAmount;
+            if (!amount) { alert('Please select a data plan.'); return; }
+        } else {
+            amount = document.getElementById('serviceAmount').value;
+        }
+
+        if (!amount || !target) { alert('Please fill all fields.'); return; }
+        btn.disabled = true;
+        btn.innerText = 'Processing...';
+        const payload = { source_acc_id: selectedServiceSourceId, amount: amount, service_type: currentService, target: target };
+        try {
+            const resp = await fetch('/api/service-payment/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' }, body: JSON.stringify(payload) });
+            const data = await resp.json();
+            if (data.success) {
+                document.getElementById('successServiceType').innerText = currentService;
+                document.getElementById('successServiceAmount').innerText = data.amount;
+                backToServiceStep(3);
+            } else { alert(data.message); btn.disabled = false; btn.innerText = 'Settle Hub'; }
+        } catch (e) { alert("Connection error."); btn.disabled = false; btn.innerText = 'Settle Hub'; }
+    }
+
+    // Deposit JS
+    let selectedDepositAccountId = null;
+    function openDepositStepper() { document.getElementById('depositModal').style.display = 'flex'; }
+    function closeDepositStepper() { document.getElementById('depositModal').style.display = 'none'; backToDepositStep(1); }
+    function backToDepositStep(n) { document.querySelectorAll('.deposit-step-content').forEach(s => s.style.display = 'none'); document.getElementById('depositStep' + n).style.display = 'block'; }
+    function selectDepositAccount(id) { selectedDepositAccountId = id; backToDepositStep(2); }
+
+    async function executeDeposit() {
+        const btn = document.getElementById('depositBtn');
+        const amount = document.getElementById('depositAmount').value;
+        const payload = { account_id: selectedDepositAccountId, amount: amount };
+        try {
+            const resp = await fetch('/api/deposit/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' }, body: JSON.stringify(payload) });
+            const data = await resp.json();
+            if (data.success) {
+                document.getElementById('finalDepositAmount').innerText = data.amount;
+                backToDepositStep(3);
+            } else { alert(data.message); btn.disabled = false; }
+        } catch (e) { alert("Execution failed."); btn.disabled = false; }
+    }
+
+    // History JS
+    async function openTransactionHistory() {
+        const modal = document.getElementById('historyModal');
+        const list = document.getElementById('historyList');
+        modal.style.display = 'flex';
+        try {
+            const resp = await fetch('/api/transaction-history/');
+            const data = await resp.json();
+            if (data.success) {
+                list.innerHTML = data.transactions.map(tx => `
+                    <div class="tx-item" style="border-bottom: 1px solid var(--border-subtle); padding: 1rem 0;">
+                        <div class="tx-icon ${tx.type === 'credit' ? 'credit' : 'debit'}">${tx.type === 'credit' ? '📥' : '📤'}</div>
+                        <div class="tx-info">
+                            <div class="tx-name" style="font-weight: 600;">${tx.details}</div>
+                            <div class="tx-date" style="font-size: 0.75rem; opacity: 0.7;">${tx.timestamp} • ${tx.bank}</div>
+                        </div>
+                        <div class="tx-amount ${tx.type === 'credit' ? 'pos' : 'neg'}" style="font-weight: 800;">${tx.type === 'credit' ? '+' : '-'}₦${tx.amount}</div>
+                    </div>
+                `).join('');
+            }
+        } catch (e) { }
+    }
+    function closeTransactionHistory() { document.getElementById('historyModal').style.display = 'none'; }
+
+    function toggleBalanceVisibility() {
+        const eyeOpen = document.getElementById('eyeOpen');
+        const eyeClosed = document.getElementById('eyeClosed');
+        const maskedElements = document.querySelectorAll('.total-bal, .badge, .spending-amount, .tx-amount');
+
+        const isCurrentlyHidden = localStorage.getItem('neuro-balance-hidden') === 'true';
+        const newState = !isCurrentlyHidden;
+
+        maskedElements.forEach(el => {
+            if (newState) {
+                el.classList.add('masked');
+                el.style.filter = 'blur(8px)';
+                el.style.opacity = '0.6';
+                el.style.pointerEvents = 'none';
+            } else {
+                el.classList.remove('masked');
+                el.style.filter = 'none';
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
+            }
+        });
+
+        if (eyeOpen && eyeClosed) {
+            eyeOpen.style.display = newState ? 'none' : 'block';
+            eyeClosed.style.display = newState ? 'block' : 'none';
+        }
+
+        localStorage.setItem('neuro-balance-hidden', newState ? 'true' : 'false');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const isHidden = localStorage.getItem('neuro-balance-hidden') === 'true';
+        if (isHidden) {
+            const eyeOpen = document.getElementById('eyeOpen');
+            const eyeClosed = document.getElementById('eyeClosed');
+            const maskedElements = document.querySelectorAll('.total-bal, .badge, .spending-amount, .tx-amount');
+
+            maskedElements.forEach(el => {
+                el.classList.add('masked');
+                el.style.filter = 'blur(8px)';
+                el.style.opacity = '0.6';
+                el.style.pointerEvents = 'none';
+            });
+
+            if (eyeOpen) eyeOpen.style.display = 'none';
+            if (eyeClosed) eyeClosed.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}

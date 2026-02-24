@@ -1,0 +1,101 @@
+{% extends 'accounts/dashboard_layout.html' %}
+
+{% block dashboard_title %}User Profile{% endblock %}
+{% block page_title %}Neural Identity{% endblock %}
+
+{% block dashboard_content %}
+<div class="animate-entry" style="max-width: 900px; margin: 0 auto; display: grid; gap: 2rem;">
+
+    <!-- Profile Card (Hero) -->
+    <div class="neuro-card"
+        style="display: flex; gap: 2.5rem; align-items: center; padding: 3rem; position: relative; overflow: hidden;">
+        <div class="ai-glow" style="opacity: 0.15;"></div>
+
+        <div style="position: relative;">
+            <div class="avatar"
+                style="width: 120px; height: 120px; font-size: 3rem; box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);">
+                {{user.username|slice:":1"|upper}}</div>
+            <div
+                style="position: absolute; bottom: 5px; right: 5px; background: var(--success); width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--bg-card);">
+            </div>
+        </div>
+
+        <div style="flex: 1;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.2rem; color: var(--text-main);">
+                        {{user.first_name}} {{user.last_name}}</h2>
+                    <p style="color: var(--text-muted); font-family: 'Courier New', monospace; font-size: 0.9rem;">ID:
+                        NEURO-{{user.id|add:"1024"}}-X</p>
+                </div>
+                <a href="{% url 'edit_profile' %}" class="btn btn-primary"
+                    style="width: auto; padding: 0.8rem 1.5rem;">Edit Profile</a>
+            </div>
+
+            <div style="display: flex; gap: 2rem; margin-top: 1.5rem;">
+                <div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">Joined</div>
+                    <div style="font-weight: 700; color: var(--text-main);">{{user.date_joined|date:"M Y"}}</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase;">Clearance
+                    </div>
+                    <div style="font-weight: 700; color: var(--accent-cyan);">Level 4 (Neural)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <!-- Contact Information -->
+        <div class="neuro-card">
+            <h3
+                style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                📱 Contact Matrix</h3>
+            <div style="display: grid; gap: 1.2rem;">
+                <div>
+                    <label
+                        style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Primary
+                        Email</label>
+                    <div
+                        style="padding: 0.8rem 1rem; background: var(--bg-app); border-radius: 10px; border: 1px solid var(--border-subtle); color: var(--text-main);">
+                        {{user.email|default:"Not set"}}</div>
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Mobile
+                        Tether</label>
+                    <div
+                        style="padding: 0.8rem 1rem; background: var(--bg-app); border-radius: 10px; border: 1px solid var(--border-subtle); color: var(--text-main);">
+                        +234 •••• •••• 82</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Hub -->
+        <div class="neuro-card">
+            <h3
+                style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                🔒 Security Protocols</h3>
+            <div style="display: grid; gap: 1rem;">
+                <button class="btn"
+                    style="width: 100%; text-align: left; background: var(--bg-app); display: flex; justify-content: space-between; padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-main) !important;">
+                    <span>Change Neural Key (Password)</span>
+                    <span>&rarr;</span>
+                </button>
+                <button class="btn"
+                    style="width: 100%; text-align: left; background: var(--bg-app); display: flex; justify-content: space-between; padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-main) !important;">
+                    <span>Two-Factor Sync</span>
+                    <span style="color: var(--success); font-weight: 800;">ON</span>
+                </button>
+                <button class="btn"
+                    style="width: 100%; text-align: left; background: var(--bg-app); display: flex; justify-content: space-between; padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 12px; color: var(--text-main) !important;">
+                    <span>Device Authorization</span>
+                    <span class="badge">2 Active</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

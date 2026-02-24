@@ -216,8 +216,9 @@ mybankapp/
 
 ## Author
 
-**Yemi**  
-Full-Stack Developer | Fintech Enthusiast
+****  
+Favor Adebayo
+Django Developer | Fintech Enthusiast
 
 ---
 

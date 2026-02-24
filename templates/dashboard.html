@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | JAMB CBT Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">JAMB CBT {{ session['user_type'].upper() }}</div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <span style="color: var(--text-muted);">Welcome, {{ session['user']['first_name'] or
+                    session['user']['firstname'] }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-primary"
+                    style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--error); color: var(--error); padding: 0.5rem 1rem;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container animate-fade">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem;">{{ title }}</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <!-- Example Dashboard Card -->
+            <div class="glass" style="padding: 2rem;">
+                <h4
+                    style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                    Coming Soon</h4>
+                <p style="font-size: 1.1rem; font-weight: 600;">Enhanced statistics and real-time exam monitoring will
+                    be available here.</p>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

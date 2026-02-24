@@ -1,0 +1,103 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Sign In to Vault{% endblock %}
+
+{% block content %}
+<div class="auth-container animate-slide-up">
+    <!-- Left: Cinematic Visual -->
+    <div class="auth-visual">
+        <div style="position: relative; z-index: 10;">
+            <div class="logo" style="font-size: 3rem; margin-bottom: 2rem;">NEURO<span
+                    style="color: #fff; font-weight: 300;">BANK</span></div>
+            <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem;">The Neural
+                <br>Finance Era
+            </h1>
+            <p style="color: rgba(255,255,255,0.7); font-size: 1.2rem; max-width: 400px; line-height: 1.6;">
+                Securely manage your Access and Polaris accounts through a unified high-performance neural hub.
+            </p>
+        </div>
+
+        <div style="margin-top: 4rem; display: flex; gap: 2rem; position: relative; z-index: 10;">
+            <div
+                style="padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+                <div style="font-weight: 600;">Neural-Grade</div>
+                <div style="font-size: 0.8rem; opacity: 0.6;">Encryption Protocol</div>
+            </div>
+            <div
+                style="padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+                <div style="font-weight: 600;">Quantum</div>
+                <div style="font-size: 0.8rem; opacity: 0.6;">Settlement Speed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Form Side -->
+    <div class="auth-form-side">
+        <div class="neuro-card" style="width: 100%; max-width: 480px; padding: 3.5rem;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;">Initialize Session</h2>
+                <p style="color: var(--text-muted);">Syncing with your financial node.</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div style="margin-bottom: 2rem;">
+                    <label
+                        style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.8rem; font-weight: 700;">Identity
+                        Handle</label>
+                    <input type="text" name="username" class="form-input" placeholder="User ID / Username" required
+                        autofocus>
+                </div>
+
+                <div style="margin-bottom: 3rem;">
+                    <label
+                        style="display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.8rem; font-weight: 700;">Neural
+                        Key</label>
+                    <div style="position: relative;">
+                        <input type="password" id="passwordInput" name="password" class="form-input"
+                            placeholder="••••••••" required>
+                        <button type="button" onclick="toggleLoginPassword()"
+                            style="position: absolute; right: 1rem; top: 1.3rem; background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path
+                                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary glow-cyan"
+                    style="width: 100%; padding: 1.25rem; font-size: 1.1rem;">
+                    Authorize Sync &rarr;
+                </button>
+            </form>
+
+            <div
+                style="text-align: center; margin-top: 3rem; border-top: 1px solid var(--border-subtle); padding-top: 2rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                    New to the network? <a href="{% url 'signup' %}"
+                        style="color: var(--accent-cyan); text-decoration: none; font-weight: 700;">Create Identity</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleLoginPassword() {
+        const passwordInput = document.getElementById('passwordInput');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.innerHTML = '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.innerHTML = '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>';
+        }
+    }
+</script>
+{% endblock %}

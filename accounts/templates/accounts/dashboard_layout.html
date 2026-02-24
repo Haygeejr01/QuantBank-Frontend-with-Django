@@ -1,0 +1,154 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}{% block dashboard_title %}Dashboard{% endblock %} | NeuroBank{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+    <!-- Mobile Theme Toggle (Fixed top-right, below hamburger) -->
+    <div onclick="toggleAppTheme()" class="mobile-theme-toggle" aria-label="Toggle Theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+    </div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+        <div class="logo">NEURO<span style="color: var(--text-main); font-weight: 300;">BANK</span></div>
+        <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
+    </div>
+
+    <!-- Sidebar Overlay (tap to close) -->
+    <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- Sidebar -->
+    <aside class="neuro-sidebar">
+        <div class="sidebar-header" style="margin-bottom: 2rem;">
+            <div class="logo">NEURO<span style="color: var(--text-main); font-weight: 300;">BANK</span></div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="mobile-close-btn" onclick="toggleMobileMenu()">&times;</button>
+
+            <a href="{% url 'dashboard' %}"
+                class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="{% url 'accounts_list' %}"
+                class="nav-item {% if request.resolver_match.url_name == 'accounts_list' %}active{% endif %}">
+                <span class="nav-icon">💳</span>
+                <span class="nav-label">Accounts</span>
+            </a>
+            <a href="{% url 'neuro_ai' %}"
+                class="nav-item {% if request.resolver_match.url_name == 'neuro_ai' %}active{% endif %}">
+                <span class="nav-icon">🧠</span>
+                <span class="nav-label">Neuro AI</span>
+            </a>
+
+            <a href="{% url 'profile' %}"
+                class="nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Profile</span>
+            </a>
+
+            <div style="margin-top: auto;">
+                <div class="promo-card">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">✨</div>
+                    <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem;">NeuroBank Pro</div>
+                    <div style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 1rem;">Unlock AI predictions.</div>
+                    <button class="btn-micro">Upgrade</button>
+                </div>
+
+                <a href="{% url 'logout' %}" class="nav-item logout">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-label">Log Out</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+        <!-- Header -->
+        <header class="db-header animate-entry">
+            <div class="header-left">
+                <h1>{% block page_title %}Welcome back{% endblock %}, {{ user.first_name|default:user.username }}</h1>
+                <p class="date-display" id="currentDate"></p>
+            </div>
+            <div class="header-right">
+                <div onclick="toggleAppTheme()" class="theme-toggle-btn desktop-only" aria-label="Toggle Theme">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </div>
+                <a href="{% url 'profile' %}" class="user-pill" style="text-decoration: none;">
+                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                </a>
+            </div>
+        </header>
+
+        {% block dashboard_content %}{% endblock %}
+    </main>
+</div>
+
+{% block dashboard_modals %}{% endblock %}
+
+<script>
+    // Global Dashboard Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+        const currentDateElem = document.getElementById('currentDate');
+        if (currentDateElem) {
+            currentDateElem.textContent = new Date().toLocaleDateString('en-US', dateOptions);
+        }
+    });
+
+    function toggleMobileMenu() {
+        const sidebar = document.querySelector('.neuro-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        const isVisible = sidebar.classList.toggle('mobile-visible');
+        if (overlay) overlay.classList.toggle('active', isVisible);
+        document.body.style.overflow = isVisible ? 'hidden' : '';
+    }
+
+    function toggleAppTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('neuro-theme', next);
+    }
+</script>
+
+{% block dashboard_scripts %}{% endblock %}
+{% endblock %}

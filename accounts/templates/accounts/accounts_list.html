@@ -1,0 +1,81 @@
+{% extends 'accounts/dashboard_layout.html' %}
+
+{% block dashboard_title %}My Accounts{% endblock %}
+{% block page_title %}Financial Nodes{% endblock %}
+
+{% block dashboard_content %}
+<div class="animate-entry" style="display: grid; gap: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <h2 style="font-size: 1.5rem; font-weight: 800;">Managed Vaults</h2>
+            <p style="color: var(--text-muted);">Syncing with {{ accounts|length }} active nodes.</p>
+        </div>
+        <button class="btn btn-primary" onclick="alert('Digital vault creation is currently in neural processing.')">+
+            New Account</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+        {% for acc in accounts %}
+        <div class="neuro-card"
+            style="position: relative; overflow: hidden; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="ai-glow" style="opacity: 0.1;"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div
+                        style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
+                        {{ acc.get_bank_type_display }}</div>
+                    <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em;">Digital Neural Account
+                    </div>
+                    <div class="acc-num-label" style="font-family: 'Courier New', monospace; letter-spacing: 2px;">****
+                        **** **** {{ acc.account_number|slice:"-4:" }}</div>
+                </div>
+                <div style="font-size: 2rem;">{% if acc.bank_type == 'accessbank' %}💎{% else %}🛡️{% endif %}</div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">LIQUID ASSETS</div>
+                <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-cyan);">₦{{ acc.balance }}</div>
+            </div>
+
+            <div
+                style="margin-top: 1.5rem; display: flex; gap: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                <div style="flex: 1;">
+                    <div style="font-size: 0.65rem; color: var(--text-muted);">TYPE</div>
+                    <div style="font-size: 0.8rem; font-weight: 700;">SAVINGS</div>
+                </div>
+                <div style="flex: 0; display: flex; gap: 0.5rem;">
+                    <button class="btn-micro"
+                        onclick="window.location.href='{% url 'dashboard' %}?action=transfer&source={{ acc.id }}'">Transfer</button>
+                    <button class="btn-micro"
+                        onclick="window.location.href='{% url 'dashboard' %}?action=deposit&source={{ acc.id }}'">Deposit</button>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <button class="btn-micro" style="opacity: 0.6;" onclick="alert('Card freezing feature coming soon!')">❄️
+                    Freeze Card</button>
+                <button class="btn-micro" style="opacity: 0.6;" onclick="alert('PIN reset feature coming soon!')">🔑
+                    Reset PIN</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="neuro-card" style="margin-top: 2rem;">
+        <div class="card-header">
+            <h3>Neural Pulse Ledger</h3>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn-micro active">All</button>
+                <button class="btn-micro">Income</button>
+                <button class="btn-micro">Spent</button>
+            </div>
+        </div>
+        <div class="tx-list">
+            <div style="text-align: center; color: var(--text-muted); padding: 4rem;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔎</div>
+                Select an account node above to view its specific neural pulse ledger.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

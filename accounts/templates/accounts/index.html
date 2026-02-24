@@ -1,0 +1,739 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}NeuroBank - Future-Ready Neural Banking{% endblock %}
+
+{% block navbar %}
+<!-- Polished Vision UI Navbar -->
+<nav class="main-nav">
+    <div class="container nav-content">
+        <div class="logo-wrapper">
+            <div class="logo-icon">
+                <span>N</span>
+            </div>
+            <span class="logo-text">NEUROBANK</span>
+        </div>
+        <div class="nav-links desktop-only">
+            <a href="#features" class="nav-link">Features</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary nav-btn">Dashboard</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="signin-link" style="white-space: nowrap;">Sign In</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary nav-btn glow-cyan">Join Now</a>
+            {% endif %}
+        </div>
+
+        <button class="hamburger-menu mobile-only" id="hamburgerBtn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <div class="logo-wrapper">
+                <div class="logo-icon"><span>N</span></div>
+                <span class="logo-text">NEUROBANK</span>
+            </div>
+            <button class="close-drawer" id="closeDrawer">&times;</button>
+        </div>
+        <div class="drawer-content">
+            <a href="#features" class="drawer-link">Features</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="drawer-link">Sign In</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary glow-cyan">Join Now</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="vision-ui-wrapper">
+    <!-- Ambient Background Lighting -->
+    <div class="glow-bg-top"></div>
+    <div class="glow-bg-bottom"></div>
+
+    <div class="container relative-z">
+        <!-- Hero Section -->
+        <section class="hero-section animate-slide-up">
+            <div class="badge-neural">
+                <span class="pulse-dot"></span>
+                THE NEURAL STANDARD
+            </div>
+
+            <h1 class="hero-title">
+                Your Assets, <br>
+                Reinvented for the <span class="gradient-text">Future.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                The world's first digital vault built on neural network architecture. Secure, lightning-fast, and
+                unapologetically modern.
+            </p>
+
+            <div class="hero-actions">
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-large shadow-cyan">Go to Dashboard</a>
+                {% else %}
+                <a href="{% url 'signup' %}" class="btn btn-primary btn-large shadow-cyan">Get Started</a>
+                <a href="#features" class="learn-more-link">
+                    Learn More <span class="arrow-down">&darr;</span>
+                </a>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Glass Grid Section -->
+        <section id="features" class="features-section">
+            <div class="features-grid">
+
+                <!-- Main Featured Card -->
+                <div class="glass-card feature-large">
+                    <div class="feature-content">
+                        <div class="icon-box cyan">
+                            <span>⚡</span>
+                        </div>
+                        <h2 class="card-title-lg">Digital Settlement Node</h2>
+                        <p class="card-text">
+                            Clear payments across global networks in milliseconds. Our neural engine handles the
+                            complexity so you don't have to.
+                        </p>
+                    </div>
+                    <div class="card-badges">
+                        <span class="badge-outline cyan">99.99% Uptime</span>
+                        <span class="badge-outline purple">Near-Zero Latency</span>
+                    </div>
+                </div>
+
+                <!-- Vertical Card -->
+                <div class="glass-card feature-medium gradient-purple">
+                    <div class="icon-box purple">
+                        <span>🛡️</span>
+                    </div>
+                    <h3 class="card-title">Neural-Grade Encryption</h3>
+                    <p class="card-text">
+                        Multiple layers of biometric and behavioral verification ensure your assets remain untouchable.
+                    </p>
+                    <div class="protocol-box">
+                        <span class="label">Security Protocol</span>
+                        <span class="value">ACTIVE: LAYER_7_ENCRYPTION</span>
+                    </div>
+                </div>
+
+                <!-- Micro Cards -->
+                <div class="glass-card feature-small">
+                    <div class="micro-icon">📱</div>
+                    <h4>Mobile First</h4>
+                    <p>Perfectly tailored for your devices.</p>
+                </div>
+                <div class="glass-card feature-small">
+                    <div class="micro-icon">🌐</div>
+                    <h4>Global Nodes</h4>
+                    <p>Connecting billions of assets.</p>
+                </div>
+                <div class="glass-card feature-small accent-border">
+                    <div class="micro-icon">🧠</div>
+                    <h4 class="text-cyan">Neural AI</h4>
+                    <p>Intelligent wealth management.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+    /* VISION UI DESIGN SYSTEM */
+    :root {
+        --vision-bg: #060b26;
+        --vision-glass: rgba(255, 255, 255, 0.03);
+        --vision-border: rgba(255, 255, 255, 0.08);
+        --vision-text-muted: rgba(255, 255, 255, 0.6);
+    }
+
+    .vision-ui-wrapper {
+        background: var(--vision-bg);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .relative-z {
+        position: relative;
+        z-index: 10;
+    }
+
+    /* BACKGROUND GLOWS */
+    .glow-bg-top {
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: radial-gradient(circle, rgba(5, 230, 255, 0.12) 0%, transparent 70%);
+        filter: blur(80px);
+        pointer-events: none;
+    }
+
+    .glow-bg-bottom {
+        position: absolute;
+        bottom: -10%;
+        right: -10%;
+        width: 70vw;
+        height: 70vw;
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+        filter: blur(100px);
+        pointer-events: none;
+    }
+
+    /* NAVBAR */
+    .main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0.5rem 0;
+    }
+
+    .main-nav.scrolled {
+        background: rgba(6, 11, 38, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--vision-border);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+    }
+
+    .logo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--accent-cyan);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(5, 230, 255, 0.4);
+        color: #000;
+        font-weight: 800;
+    }
+
+    .logo-text {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .nav-link {
+        color: var(--vision-text-muted);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+        color: #fff;
+    }
+
+    /* Polished Sign In link */
+    .signin-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        transition: background 0.3s;
+    }
+
+    .signin-link:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn {
+        border-radius: 12px;
+        padding: 0.7rem 1.8rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    .desktop-only {
+        display: flex !important;
+    }
+
+    .mobile-only {
+        display: none !important;
+    }
+
+    @media (max-width: 900px) {
+        .desktop-only {
+            display: none !important;
+        }
+
+        .mobile-only {
+            display: flex !important;
+        }
+    }
+
+    /* HAMBURGER */
+    .hamburger-menu {
+        background: none;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .hamburger-menu .bar {
+        width: 24px;
+        height: 2px;
+        background: #fff;
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+
+    /* MOBILE DRAWER */
+    .mobile-drawer {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: var(--vision-bg);
+        z-index: 2000;
+        padding: 2rem;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-drawer.active {
+        right: 0;
+    }
+
+    .drawer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4rem;
+    }
+
+    .close-drawer {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2.5rem;
+        cursor: pointer;
+    }
+
+    .drawer-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .drawer-link {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    /* HERO */
+    .hero-section {
+        padding: 12rem 0 8rem;
+        text-align: center;
+    }
+
+    .badge-neural {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 1.4rem;
+        background: rgba(5, 230, 255, 0.08);
+        border: 1px solid rgba(5, 230, 255, 0.2);
+        border-radius: 100px;
+        color: var(--accent-cyan);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.15rem;
+        margin-bottom: 3rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--accent-cyan);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .hero-title {
+        font-size: clamp(3rem, 8vw, 5.5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        margin-bottom: 2.5rem;
+        background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-purple) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+        color: var(--vision-text-muted);
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        max-width: 650px;
+        margin: 0 auto 4.5rem;
+        line-height: 1.7;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-large {
+        padding: 1.3rem 4rem !important;
+        font-size: 1.15rem !important;
+        border-radius: 18px !important;
+    }
+
+    .learn-more-link {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .arrow-down {
+        font-size: 1.4rem;
+    }
+
+    /* FEATURES GRID */
+    .features-section {
+        padding: 6rem 0 12rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 1.5rem;
+    }
+
+    .glass-card {
+        background: var(--vision-glass);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--vision-border);
+        border-radius: 32px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-large {
+        grid-column: span 7;
+        padding: 4rem;
+        min-height: 440px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .feature-medium {
+        grid-column: span 5;
+        padding: 4rem;
+    }
+
+    .feature-small {
+        grid-column: span 4;
+        padding: 2.5rem;
+        text-align: center;
+    }
+
+    .icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2.5rem;
+        font-size: 1.6rem;
+    }
+
+    .icon-box.cyan {
+        background: rgba(5, 230, 255, 0.1);
+        border: 1px solid rgba(5, 230, 255, 0.3);
+        color: var(--accent-cyan);
+    }
+
+    .icon-box.purple {
+        background: rgba(168, 85, 247, 0.1);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        color: var(--accent-purple);
+    }
+
+    .card-title-lg {
+        font-size: 2.6rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.03em;
+    }
+
+    .card-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    .card-text {
+        color: var(--vision-text-muted);
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    .card-badges {
+        display: flex;
+        gap: 1rem;
+        margin-top: 3rem;
+    }
+
+    .badge-outline {
+        height: 42px;
+        padding: 0 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge-outline.cyan {
+        color: var(--accent-cyan);
+    }
+
+    .badge-outline.purple {
+        color: var(--accent-purple);
+    }
+
+    .protocol-box {
+        margin-top: 4rem;
+        padding: 1.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .protocol-box .label {
+        display: block;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+    }
+
+    .protocol-box .value {
+        font-family: 'Courier New', monospace;
+        color: var(--accent-cyan);
+        font-weight: bold;
+    }
+
+    .micro-icon {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .accent-border {
+        border-color: rgba(5, 230, 255, 0.3);
+    }
+
+    .text-cyan {
+        color: var(--accent-cyan);
+    }
+
+    /* RESPONSIVE REFINEMENTS */
+    @media (max-width: 1024px) {
+        .main-nav {
+            position: relative;
+        }
+
+        /* Don't overlap on smaller screens */
+        .features-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .feature-large,
+        .feature-medium,
+        .feature-small {
+            grid-column: span 2 !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 6rem 0 4rem;
+        }
+
+        .hero-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-large {
+            width: 100%;
+            text-align: center;
+            padding: 1.2rem 2rem !important;
+        }
+
+        .learn-more-link {
+            margin-top: 1.5rem;
+        }
+
+        .card-title-lg {
+            font-size: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+        }
+
+        .nav-link.desktop-only {
+            display: none;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .features-grid {
+            gap: 1rem;
+        }
+
+        .glass-card {
+            padding: 2.5rem !important;
+            border-radius: 24px;
+        }
+
+        .card-badges {
+            flex-wrap: wrap;
+        }
+    }
+
+    /* Small Phone Precision (320px - 375px) */
+    @media (max-width: 375px) {
+        .hero-title {
+            font-size: 2.6rem !important;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .badge-neural {
+            font-size: 0.7rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block footer %}
+<footer
+    style="background: #020515; padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; color: rgba(255,255,255,0.4);">
+    <div class="container">
+        <div style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 1.5rem; letter-spacing: 0.3rem;">
+            NEUROBANK</div>
+        <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem;">
+            <a href="#" style="color: inherit; text-decoration: none; font-size: 0.85rem;">Privacy</a>
+            <a href="#" style="color: inherit; text-decoration: none; font-size: 0.85rem;">Security</a>
+            <a href="#" style="color: inherit; text-decoration: none; font-size: 0.85rem;">Infrastructure</a>
+        </div>
+        <p style="font-size: 0.85rem;">&copy; 2026 NeuroBank Protocol. All neural identities protected.</p>
+    </div>
+</footer>
+
+<script>
+    // Mobile Drawer Logic
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const closeDrawer = document.getElementById('closeDrawer');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+
+    hamburgerBtn.addEventListener('click', () => {
+        mobileDrawer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    const hideDrawer = () => {
+        mobileDrawer.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    closeDrawer.addEventListener('click', hideDrawer);
+    drawerLinks.forEach(link => link.addEventListener('click', hideDrawer));
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('.main-nav');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+</script>
+{% endblock %}

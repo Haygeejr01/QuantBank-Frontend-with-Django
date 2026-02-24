@@ -1,0 +1,63 @@
+{% extends 'accounts/dashboard_layout.html' %}
+
+{% block dashboard_title %}Edit Profile{% endblock %}
+{% block page_title %}Neural Identity Sync{% endblock %}
+
+{% block dashboard_content %}
+<div class="animate-entry" style="max-width: 600px; margin: 0 auto;">
+    <div class="neuro-card" style="padding: 2.5rem; position: relative; overflow: hidden;">
+        <div class="ai-glow" style="opacity: 0.1;"></div>
+
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 1rem; font-size: 2rem;">
+                {{user.username|slice:":1"|upper}}</div>
+            <h2 style="font-size: 1.5rem; font-weight: 800;">Modify Identity</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Update your neural record in the banking matrix.
+            </p>
+        </div>
+
+        <form method="POST" action="{% url 'edit_profile' %}" style="display: grid; gap: 1.5rem;">
+            {% csrf_token %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label
+                        style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-transform: uppercase;">First
+                        Name</label>
+                    <input type="text" name="first_name" value="{{user.first_name}}" class="form-input"
+                        style="margin-bottom: 0;" required>
+                </div>
+                <div>
+                    <label
+                        style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Last
+                        Name</label>
+                    <input type="text" name="last_name" value="{{user.last_name}}" class="form-input"
+                        style="margin-bottom: 0;" required>
+                </div>
+            </div>
+
+            <div>
+                <label
+                    style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Primary
+                    Email</label>
+                <input type="email" name="email" value="{{user.email}}" class="form-input" style="margin-bottom: 0;"
+                    required>
+            </div>
+
+            <div
+                style="margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; display: flex; gap: 1rem;">
+                <a href="{% url 'profile' %}" class="btn"
+                    style="flex: 1; text-align: center; padding: 1rem; border: 1px solid var(--border-subtle); border-radius: 12px; font-weight: 600;">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="flex: 2;">Neural Sync (Save)</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="neuro-card"
+        style="margin-top: 1.5rem; background: rgba(6, 182, 212, 0.05); border-color: var(--accent-cyan); display: flex; align-items: center; gap: 1rem; padding: 1.2rem;">
+        <div style="font-size: 1.5rem;">⚙️</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">Changing your email will require a new biometric link
+            verification on your next entry.</p>
+    </div>
+</div>
+{% endblock %}
