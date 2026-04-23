@@ -1,75 +1,56 @@
 {% extends 'accounts/dashboard_layout.html' %}
+{% load money %}
 
-{% block dashboard_title %}Bills & Payments{% endblock %}
-{% block page_title %}Service Nodes{% endblock %}
+{% block dashboard_title %}Bills{% endblock %}
+{% block page_kicker %}Payments{% endblock %}
+{% block page_title %}Bills and subscriptions{% endblock %}
 
 {% block dashboard_content %}
-<div class="animate-entry" style="max-width: 1000px; margin: 0 auto;">
+<section class="lp-panel">
+    <div class="lp-section-head">
+        <div>
+            <p class="lp-eyebrow">Quick payments</p>
+            <h3>Choose a service</h3>
+        </div>
+        <a href="{% url 'dashboard' %}" class="lp-btn lp-btn-light">Open payment menu</a>
+    </div>
+    <div class="lp-quick-grid compact">
+        <a class="lp-action" href="{% url 'dashboard' %}">
+            <span><svg class="lp-icon"><use href="#icon-phone"></use></svg></span>
+            Airtime
+        </a>
+        <a class="lp-action" href="{% url 'dashboard' %}">
+            <span><svg class="lp-icon"><use href="#icon-wifi"></use></svg></span>
+            Data
+        </a>
+        <a class="lp-action" href="{% url 'dashboard' %}">
+            <span><svg class="lp-icon"><use href="#icon-receipt"></use></svg></span>
+            Bills
+        </a>
+    </div>
+</section>
 
-    <!-- Simplified Bills Matrix -->
-    <div class="neuro-card"
-        style="text-align: center; padding: 5rem; border: 1px dashed var(--border-subtle); background: transparent;">
-        <div style="font-size: 3.5rem; margin-bottom: 2rem; filter: drop-shadow(0 0 20px var(--accent-cyan));">🧾</div>
-        <h2 style="font-size: 1.8rem; margin-bottom: 1rem;">Unified Bill Settlement</h2>
-        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 2.5rem;">
-            Securely settle utility nodes, educational assessments, and neural subscriptions from a single interface.
-        </p>
-
-        <div
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; text-align: left;">
-            <div class="neuro-card"
-                style="padding: 2rem; cursor: pointer; transition: 0.3s; border-color: var(--border-subtle);"
-                onclick="openServiceStepper('bills')">
-                <div style="font-size: 1.5rem; margin-bottom: 1rem;">⚡</div>
-                <h3 style="margin-bottom: 0.5rem;">Utility Matrix</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Electricity, Water, and Waste management nodes.
-                </p>
-            </div>
-
-            <div class="neuro-card"
-                style="padding: 2rem; cursor: pointer; transition: 0.3s; border-color: var(--border-subtle);"
-                onclick="openServiceStepper('bills')">
-                <div style="font-size: 1.5rem; margin-bottom: 1rem;">🎭</div>
-                <h3 style="margin-bottom: 0.5rem;">Subscription Nodes</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Cable TV, Internet, and streaming
-                    authentication.</p>
-            </div>
-
-            <div class="neuro-card"
-                style="padding: 2rem; cursor: pointer; transition: 0.3s; border-color: var(--border-subtle);"
-                onclick="openServiceStepper('bills')">
-                <div style="font-size: 1.5rem; margin-bottom: 1rem;">🎓</div>
-                <h3 style="margin-bottom: 0.5rem;">Educational Nodes</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Institutional fee settlement and academic
-                    credits.</p>
-            </div>
+<section class="lp-panel">
+    <div class="lp-section-head">
+        <div>
+            <p class="lp-eyebrow">Pay with</p>
+            <h3>Available accounts</h3>
         </div>
     </div>
-
-    <!-- Info Notice -->
-    <div class="neuro-card"
-        style="margin-top: 2rem; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.1); padding: 1.5rem; display: flex; align-items: center; gap: 1rem;">
-        <div style="font-size: 1.2rem;">💡</div>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">
-            Airtime and Data recharge protocols have been moved to the <a href="{% url 'dashboard' %}"
-                style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">Main Dashboard Hub</a> for
-            faster access.
-        </p>
+    <div class="lp-account-grid">
+        {% for acc in accounts %}
+        <article class="lp-account-card">
+            <div class="lp-account-top">
+                <span class="lp-bank-icon"><svg class="lp-icon"><use href="#icon-bank"></use></svg></span>
+                <span class="lp-status {% if acc.is_frozen %}danger{% endif %}">{% if acc.is_frozen %}Frozen{% else %}Active{% endif %}</span>
+            </div>
+            <h4>{{ acc.bank_short_name }}</h4>
+            <p>{{ acc.masked_number }}</p>
+            <strong>{{ acc.balance|naira }}</strong>
+        </article>
+        {% empty %}
+        <div class="lp-empty-state">Add an account before paying bills.</div>
+        {% endfor %}
     </div>
-
-</div>
-
-<style>
-    .neuro-card:hover {
-        border-color: var(--accent-cyan) !important;
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
-    }
-</style>
-{% endblock %}
-
-{% block dashboard_scripts %}
-<script>
-    // Placeholder if additional logic is needed
-</script>
+</section>
 {% endblock %}

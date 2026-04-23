@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: lumopay-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-prod.txt && python manage.py collectstatic --noinput
+    preDeployCommand: python manage.py migrate
+    startCommand: gunicorn banking_system.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.13
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lumopay-postgres
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: FLW_PUBLIC_KEY
+        sync: false
+      - key: FLW_SECRET_KEY
+        sync: false
+      - key: FLW_WEBHOOK_SECRET
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: SMS_API_KEY
+        sync: false
+      - key: ALLOW_MANUAL_DEPOSITS
+        value: "False"
+
+databases:
+  - name: lumopay-postgres
+    databaseName: lumopay
+    plan: free

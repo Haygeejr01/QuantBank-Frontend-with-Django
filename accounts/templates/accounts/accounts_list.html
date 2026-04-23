@@ -1,81 +1,227 @@
 {% extends 'accounts/dashboard_layout.html' %}
+{% load money %}
 
-{% block dashboard_title %}My Accounts{% endblock %}
-{% block page_title %}Financial Nodes{% endblock %}
+{% block dashboard_title %}Accounts{% endblock %}
+{% block page_kicker %}Linked accounts{% endblock %}
+{% block page_title %}Manage accounts{% endblock %}
 
 {% block dashboard_content %}
-<div class="animate-entry" style="display: grid; gap: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <div>
-            <h2 style="font-size: 1.5rem; font-weight: 800;">Managed Vaults</h2>
-            <p style="color: var(--text-muted);">Syncing with {{ accounts|length }} active nodes.</p>
+<section class="lp-page-grid">
+    <div class="lp-panel">
+        <div class="lp-section-head">
+            <div>
+                <p class="lp-eyebrow">Accounts</p>
+                <h3>Your linked accounts</h3>
+            </div>
+            <button class="lp-btn lp-btn-primary" type="button" onclick="openLinkPanel()">
+                <svg class="lp-icon"><use href="#icon-plus"></use></svg>
+                Add account
+            </button>
         </div>
-        <button class="btn btn-primary" onclick="alert('Digital vault creation is currently in neural processing.')">+
-            New Account</button>
+
+        <div class="lp-account-grid">
+            {% for acc in accounts %}
+            <article class="lp-account-card large">
+                <div class="lp-account-top">
+                    <span class="lp-bank-icon"><svg class="lp-icon"><use href="#icon-bank"></use></svg></span>
+                    <span class="lp-status {% if acc.is_frozen %}danger{% endif %}">
+                        {% if acc.is_frozen %}Frozen{% else %}Active{% endif %}
+                    </span>
+                </div>
+                <h4>{{ acc.bank_name }}</h4>
+                <p>{{ acc.masked_number }}</p>
+                <strong>{{ acc.balance|naira }}</strong>
+                <div class="lp-card-actions">
+                    <button type="button" onclick="toggleFreeze('{{ acc.id }}')" class="lp-btn lp-btn-light">
+                        {% if acc.is_frozen %}Unfreeze{% else %}Freeze{% endif %}
+                    </button>
+                    <button type="button" onclick="openPinModal('{{ acc.id }}', '{{ acc.bank_short_name|escapejs }}')" class="lp-btn lp-btn-light">Change PIN</button>
+                </div>
+            </article>
+            {% empty %}
+            <div class="lp-empty-state">No account is linked yet.</div>
+            {% endfor %}
+        </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
-        {% for acc in accounts %}
-        <div class="neuro-card"
-            style="position: relative; overflow: hidden; min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
-            <div class="ai-glow" style="opacity: 0.1;"></div>
-
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div
-                        style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">
-                        {{ acc.get_bank_type_display }}</div>
-                    <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em;">Digital Neural Account
-                    </div>
-                    <div class="acc-num-label" style="font-family: 'Courier New', monospace; letter-spacing: 2px;">****
-                        **** **** {{ acc.account_number|slice:"-4:" }}</div>
-                </div>
-                <div style="font-size: 2rem;">{% if acc.bank_type == 'accessbank' %}💎{% else %}🛡️{% endif %}</div>
+    <aside class="lp-panel lp-kyc-panel" id="linkPanel">
+        <div class="lp-section-head">
+            <div>
+                <p class="lp-eyebrow">Account linking</p>
+                <h3>Add bank accounts</h3>
             </div>
-
-            <div style="margin-top: 2rem;">
-                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">LIQUID ASSETS</div>
-                <div style="font-size: 2.5rem; font-weight: 800; color: var(--accent-cyan);">₦{{ acc.balance }}</div>
-            </div>
-
-            <div
-                style="margin-top: 1.5rem; display: flex; gap: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
-                <div style="flex: 1;">
-                    <div style="font-size: 0.65rem; color: var(--text-muted);">TYPE</div>
-                    <div style="font-size: 0.8rem; font-weight: 700;">SAVINGS</div>
-                </div>
-                <div style="flex: 0; display: flex; gap: 0.5rem;">
-                    <button class="btn-micro"
-                        onclick="window.location.href='{% url 'dashboard' %}?action=transfer&source={{ acc.id }}'">Transfer</button>
-                    <button class="btn-micro"
-                        onclick="window.location.href='{% url 'dashboard' %}?action=deposit&source={{ acc.id }}'">Deposit</button>
-                </div>
-            </div>
-            <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <button class="btn-micro" style="opacity: 0.6;" onclick="alert('Card freezing feature coming soon!')">❄️
-                    Freeze Card</button>
-                <button class="btn-micro" style="opacity: 0.6;" onclick="alert('PIN reset feature coming soon!')">🔑
-                    Reset PIN</button>
-            </div>
+            {% if kyc_profile.is_verified %}
+            <span class="lp-status">Verified</span>
+            {% else %}
+            <span class="lp-status danger">Not verified</span>
+            {% endif %}
         </div>
-        {% endfor %}
-    </div>
 
-    <div class="neuro-card" style="margin-top: 2rem;">
-        <div class="card-header">
-            <h3>Neural Pulse Ledger</h3>
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="btn-micro active">All</button>
-                <button class="btn-micro">Income</button>
-                <button class="btn-micro">Spent</button>
-            </div>
+        <p class="lp-muted">Enter your BVN and NIN to find mock accounts for this prototype. LumoPay stores masked values and secure hashes only.</p>
+
+        <div class="lp-two-col">
+            <label class="lp-field">BVN
+                <input id="bvnInput" type="password" maxlength="11" placeholder="11 digits">
+            </label>
+            <label class="lp-field">NIN
+                <input id="ninInput" type="password" maxlength="11" placeholder="11 digits">
+            </label>
         </div>
-        <div class="tx-list">
-            <div style="text-align: center; color: var(--text-muted); padding: 4rem;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔎</div>
-                Select an account node above to view its specific neural pulse ledger.
-            </div>
+        <label class="lp-check-row">
+            <input id="consentInput" type="checkbox">
+            <span>I agree to verify my identity for account linking.</span>
+        </label>
+        <div class="lp-inline-actions">
+            <button class="lp-btn lp-btn-primary" type="button" onclick="verifyIdentity()">Verify identity</button>
+            <button class="lp-btn lp-btn-light" type="button" onclick="discoverAccounts()">Find accounts</button>
         </div>
+
+        <div id="identityResult" class="lp-form-note"></div>
+        <div id="discoveredAccounts" class="lp-discovery-list"></div>
+        <button id="linkSelectedBtn" class="lp-btn lp-btn-primary" type="button" onclick="linkSelectedAccounts()" style="display:none">Add selected accounts</button>
+    </aside>
+</section>
+
+<div class="lp-modal" id="pinModal">
+    <div class="lp-modal-card">
+        <button class="lp-icon-btn lp-modal-close" type="button" onclick="closeModal('pinModal')" aria-label="Close">
+            <svg class="lp-icon"><use href="#icon-x"></use></svg>
+        </button>
+        <h2>Change transaction PIN</h2>
+        <p class="lp-muted" id="pinAccountLabel"></p>
+        <label class="lp-field">Current PIN
+            <input id="currentPin" type="password" maxlength="4" placeholder="4 digits">
+        </label>
+        <label class="lp-field">New PIN
+            <input id="newPin" type="password" maxlength="4" placeholder="4 digits">
+        </label>
+        <label class="lp-field">Confirm new PIN
+            <input id="confirmPin" type="password" maxlength="4" placeholder="4 digits">
+        </label>
+        <button class="lp-btn lp-btn-primary" type="button" onclick="resetPin()">Save PIN</button>
     </div>
 </div>
+{% endblock %}
+
+{% block dashboard_scripts %}
+<script>
+    const csrfToken = '{{ csrf_token }}';
+    let selectedPinAccountId = null;
+    let discoveredAccounts = [];
+
+    function openLinkPanel() {
+        document.getElementById('linkPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    async function verifyIdentity() {
+        const response = await fetch('/api/kyc/verify/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({
+                bvn: document.getElementById('bvnInput').value,
+                nin: document.getElementById('ninInput').value,
+                consent: document.getElementById('consentInput').checked
+            })
+        });
+        const data = await response.json();
+        document.getElementById('identityResult').textContent = data.success
+            ? `Verified: BVN ${data.masked_bvn}, NIN ${data.masked_nin}`
+            : (data.message || 'Verification failed.');
+    }
+
+    async function discoverAccounts() {
+        const response = await fetch('/api/accounts/discover/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({})
+        });
+        const data = await response.json();
+        if (!data.success) {
+            document.getElementById('identityResult').textContent = data.message || 'Could not find accounts.';
+            return;
+        }
+        discoveredAccounts = data.accounts;
+        const list = document.getElementById('discoveredAccounts');
+        if (!discoveredAccounts.length) {
+            list.innerHTML = '<div class="lp-empty-state">No new accounts found.</div>';
+            document.getElementById('linkSelectedBtn').style.display = 'none';
+            return;
+        }
+        list.innerHTML = discoveredAccounts.map(account => `
+            <label class="lp-discovery-card">
+                <input type="checkbox" value="${account.bank_type}">
+                <span class="lp-bank-icon"><svg class="lp-icon"><use href="#icon-bank"></use></svg></span>
+                <span><strong>${account.bank_name}</strong><small>**** ${account.account_number.slice(-4)} - NGN ${Number(account.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}</small></span>
+                <i><svg class="lp-icon"><use href="#icon-check"></use></svg></i>
+            </label>
+        `).join('');
+        document.getElementById('linkSelectedBtn').style.display = 'inline-flex';
+    }
+
+    async function linkSelectedAccounts() {
+        const selected = Array.from(document.querySelectorAll('#discoveredAccounts input:checked')).map(input => input.value);
+        if (!selected.length) {
+            alert('Choose at least one account.');
+            return;
+        }
+        const response = await fetch('/api/accounts/link/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({ bank_types: selected })
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.reload();
+            return;
+        }
+        alert(data.message || 'Could not add accounts.');
+    }
+
+    async function toggleFreeze(accountId) {
+        const response = await fetch('/api/toggle-freeze/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({ account_id: accountId })
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Could not update account.');
+        }
+    }
+
+    function openPinModal(accountId, label) {
+        selectedPinAccountId = accountId;
+        document.getElementById('pinAccountLabel').textContent = label;
+        openModal('pinModal');
+    }
+
+    async function resetPin() {
+        const response = await fetch('/api/reset-pin/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+            body: JSON.stringify({
+                account_id: selectedPinAccountId,
+                current_pin: document.getElementById('currentPin').value,
+                new_pin: document.getElementById('newPin').value,
+                confirm_pin: document.getElementById('confirmPin').value
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.reload();
+        } else {
+            alert(data.message || 'Could not update PIN.');
+        }
+    }
+</script>
 {% endblock %}
