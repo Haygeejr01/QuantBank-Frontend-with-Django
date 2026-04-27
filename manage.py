@@ -2,6 +2,16 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - optional until dependencies are installed
+    load_dotenv = None
+
+
+if load_dotenv:
+    load_dotenv(Path(__file__).resolve().parent / ".env")
 
 
 def main():

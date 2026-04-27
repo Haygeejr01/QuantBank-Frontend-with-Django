@@ -1,5 +1,3 @@
-# Generated for NeuroBank production hardening.
-
 import accounts.models
 import django.contrib.auth.hashers
 import django.db.models.deletion

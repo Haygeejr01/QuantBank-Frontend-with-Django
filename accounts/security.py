@@ -45,15 +45,14 @@ def create_two_factor_challenge(user, purpose, method="email", account=None):
         recipient = user.email
         if recipient:
             send_mail(
-                "Your NeuroBank verification code",
-                f"Your NeuroBank verification code is {code}. It expires in {settings.OTP_EXPIRY_MINUTES} minutes.",
+                "Your LumoPay verification code",
+                f"Your LumoPay verification code is {code}. It expires in {settings.OTP_EXPIRY_MINUTES} minutes.",
                 settings.DEFAULT_FROM_EMAIL,
                 [recipient],
                 fail_silently=True,
             )
     elif method == "sms":
-        # SMS delivery is intentionally adapter-backed. The challenge is created
-        # now; live delivery should be connected through settings.SMS_PROVIDER.
+        # We can plug real SMS delivery into this later.
         challenge.metadata["sms_provider"] = settings.SMS_PROVIDER or "not_configured"
         challenge.save(update_fields=["metadata"])
 
@@ -69,7 +68,7 @@ def get_totp_uri(user):
     secret = get_totp_secret(profile)
     return pyotp.totp.TOTP(secret).provisioning_uri(
         name=user.email or user.username,
-        issuer_name="NeuroBank",
+        issuer_name="LumoPay",
     )
 
 

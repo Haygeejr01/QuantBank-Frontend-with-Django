@@ -4,8 +4,15 @@ from pathlib import Path
 
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - optional until dependencies are installed
+    load_dotenv = None
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+if load_dotenv:
+    load_dotenv(BASE_DIR / ".env")
 
 
 def env_bool(name, default=False):
@@ -29,8 +36,6 @@ DEBUG = env_bool("DEBUG", True)
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1,.onrender.com")
 CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -78,10 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'banking_system.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
@@ -89,6 +90,7 @@ if DATABASE_URL:
         "default": dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=600,
+            conn_health_checks=True,
             ssl_require=not DEBUG,
         )
     }
@@ -99,10 +101,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -119,10 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Africa/Lagos'
@@ -130,10 +124,6 @@ TIME_ZONE = 'Africa/Lagos'
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [

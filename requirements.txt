@@ -1,5 +1,6 @@
 Django>=5.2,<6.0
 dj-database-url>=2.3
+python-dotenv>=1.0
 pyotp>=2.9
 requests>=2.32
 whitenoise>=6.8

@@ -58,8 +58,8 @@ class FlutterwaveClient:
                 "name": intent.user.get_full_name() or intent.user.username,
             },
             "customizations": {
-                "title": "NeuroBank Wallet Funding",
-                "description": intent.description or "Fund NeuroBank account",
+                "title": "LumoPay Wallet Funding",
+                "description": intent.description or "Fund your LumoPay account",
             },
             "meta": {
                 "payment_intent_id": intent.id,
@@ -90,7 +90,7 @@ class FlutterwaveClient:
             "action": "instant",
             "type": "bank",
             "callback_url": callback_url,
-            "narration": intent.description or "NeuroBank transfer",
+            "narration": intent.description or "LumoPay transfer",
             "payment_instruction": {
                 "amount": {
                     "value": float(intent.amount),
